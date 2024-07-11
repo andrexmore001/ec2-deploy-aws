@@ -21,12 +21,12 @@ jobs:
       run: npm install
 
     - name: Build
-      run: npm run build
+      run: npm run build:prod
       
     - name: Deploy to my EC2 instance
       uses: easingthemes/ssh-deploy@v2.1.5
       with:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY}}
+        SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
         SOURCE: "dist/angular-17-crud-example/"
         REMOTE_HOST: "100.28.127.93"
         REMOTE_USER: "ubuntu"
