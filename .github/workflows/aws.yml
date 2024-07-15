@@ -39,8 +39,8 @@ jobs:
         chmod 600 private_key.pem
 
         # Create known_hosts file if it doesn't exist
-        mkdir -p /home/runner/.ssh
-        touch /home/runner/.ssh/known_hosts
+        sudo mkdir -p /home/runner/.ssh
+        sudo touch /home/runner/.ssh/known_hosts
           
         # Clear old key from known_hosts
         ssh-keygen -R 100.28.127.93 >> /home/runner/.ssh/known_hosts
