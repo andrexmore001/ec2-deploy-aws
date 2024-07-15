@@ -18,16 +18,35 @@ jobs:
       run: cd ./
 
     - name: Install dependencies
-      run: npm install
+      run: pwd & npm install
 
     - name: Build
       run: npm run build
-      
-    - name: Deploy to my EC2 instance
-      uses: easingthemes/ssh-deploy@v2.1.5
+    
+    - name: rsync deployments
+      uses: burnett01/rsync-deployments@5.1
       with:
-        SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-        SOURCE: "./dist/angular-17-crud-example/"
-        REMOTE_HOST: "100.28.127.93"
-        REMOTE_USER: "ubuntu"
-        TARGET: "/var/www/html/angular-demo/"
+        switches: -avzr --delete
+        path: ./*
+        remote_path: /var/www/html/angular-demo/
+        remote_host: 100.28.127.93
+        remote_user: ubuntu
+        remote_key: "${{ secrets.SSH_PRIVATE_KEY }}"
+
+    - name: Set ownership on remote server
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+        chmod 600 private_key.pem
+
+        # Create known_hosts file if it doesn't exist
+        mkdir -p /home/runner/.ssh
+        touch /home/runner/.ssh/known_hosts
+          
+        # Clear old key from known_hosts
+        ssh-keygen -R 100.28.127.93 >> /home/runner/.ssh/known_hosts
+
+        # Run the SSH command
+        ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@100.28.127.93 \
+        "sudo chown -R ubuntu:apache /var/www/html/angular-demo/ && chmod 777 -R /var/www/html/angular-demo/storage && chmod -R 777 /var/www/html/angular-demo/bootstrap/cache/ && cd /var/www/html/angular-demo/ && sudo npm install -g vite  && npm install && sudo chown -R ubuntu:apache /var/www/html/angular-demo/ && chmod +x /var/www/html/angular-demo//dev_run.sh"          
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
