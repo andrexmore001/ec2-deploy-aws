@@ -43,7 +43,7 @@ jobs:
         #sudo touch /home/runner/.ssh/known_hosts
           
         # Clear old key from known_hosts
-        ssh-keygen -R 100.28.127.93 >> /home/runner/.ssh/known_hosts
+        #ssh-keygen -R 100.28.127.93 >> /home/runner/.ssh/known_hosts
 
         # Run the SSH command
         ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@100.28.127.93 \
