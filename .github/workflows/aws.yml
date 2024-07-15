@@ -27,7 +27,7 @@ jobs:
       uses: burnett01/rsync-deployments@5.1
       with:
         switches: -avzr --delete
-        path: ./*
+        path: ./dist/angular-17-crud/browser/*
         remote_path: /var/www/html/angular-demo/
         remote_host: 100.28.127.93
         remote_user: ubuntu
@@ -47,6 +47,6 @@ jobs:
 
         # Run the SSH command
         ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@100.28.127.93 \
-        "sudo chown -R ubuntu:www-data /var/www/html/angular-demo/ && chmod 777 -R /var/www/html/angular-demo/storage && chmod -R 777 /var/www/html/angular-demo/bootstrap/cache/ && cd /var/www/html/angular-demo/ && sudo npm install -g vite  && npm install && sudo chown -R ubuntu:www-data /var/www/html/angular-demo/ && chmod +x /var/www/html/angular-demo//dev_run.sh"          
+        "sudo chown -R ubuntu:www-data /var/www/html/angular-demo/ && chmod 777 -R /var/www/html/angular-demo/"          
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
