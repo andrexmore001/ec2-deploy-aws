@@ -50,3 +50,4 @@ jobs:
         "sudo chown -R ubuntu:www-data /var/www/html/angular-demo/ && chmod 777 -R /var/www/html/angular-demo/"          
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        IP_SERVER: ${{ secrets.IP_SERVER}}
