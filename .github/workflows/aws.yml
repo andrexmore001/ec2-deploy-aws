@@ -47,7 +47,14 @@ jobs:
 
         # Run the SSH command
         ssh -i private_key.pem -o StrictHostKeyChecking=no ubuntu@${{ secrets.IP_SERVER}} \
-        "sudo chown -R ubuntu:www-data /var/www/html/angular-demo/ && chmod 777 -R /var/www/html/angular-demo/"          
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        IP_SERVER: ${{ secrets.IP_SERVER}}
+        "sudo chown -R ubuntu:www-data /var/www/html/angular-demo/ && chmod 777 -R /var/www/html/angular-demo/"
+
+    - name: 🎉 Deploy to Remote Server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.IP_SERVER}}
+        username: ubuntu
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+            cd /var/www/html/angular-demo
+            ./prod_run.sh
